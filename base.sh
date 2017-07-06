@@ -49,12 +49,6 @@ function get_current_action () {
 }
 
 function build_prompt {
-    local enabled=`git config --local --get oh-my-git.enabled`
-    if [[ ${enabled} == false ]]; then
-        echo "${PSORG}"
-        exit;
-    fi
-
     local prompt=""
 
     # Git info
@@ -62,6 +56,12 @@ function build_prompt {
     if [[ -n $current_commit_hash ]]; then local is_a_git_repo=true; fi
 
     if [[ $is_a_git_repo == true ]]; then
+        local enabled=`git config --local --get oh-my-git.enabled`
+        if [[ ${enabled} == false ]]; then
+            echo "${PSORG}"
+            exit;
+        fi
+
         local current_branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
         if [[ $current_branch == 'HEAD' ]]; then local detached=true; fi
 
